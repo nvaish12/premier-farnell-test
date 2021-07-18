@@ -1,5 +1,6 @@
 package uk.farnell.com.pages;
 
+import com.github.javafaker.Faker;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -15,32 +16,63 @@ public class RegistrationPage {
     CommonExpectedConditions utils;
 
     public RegistrationPage(Hook hook, CommonExpectedConditions utils) {
-        this.hook=hook;
-        this.utils=utils;
+        this.hook = hook;
+        this.utils = utils;
         PageFactory.initElements(hook.getDriver(), this);
     }
 
-    @FindBy(css = "#guestPar > a.regLink.omTagEvt")
+    Faker faker = new Faker();
+
+    @FindBy(xpath = "//*[@class='regLink omTagEvt']")
     private WebElement registrationLink;
 
-    @FindBy(id="onetrust-accept-btn-handler")
+    @FindBy(id = "onetrust-accept-btn-handler")
     private WebElement cookies;
+
+    @FindBy(id = "logonId")
+    private WebElement userName;
+
+    @FindBy(id = "logonPassword")
+    private WebElement userPassword;
+
+    @FindBy(id = "firstName")
+    private WebElement fullName;
+
+    @FindBy(id = "email1")
+    private WebElement email;
+
+    @FindBy(id = "registerValidate")
+    private WebElement registerButton;
 
     public void goToUrl() {
         hook.getDriver().get(utils.getBaseUrl());
     }
 
     public void navigateToRegistrationPage() throws InterruptedException {
-        Thread.sleep(5000);
-        utils.waitUntilElementIsVisble(cookies).click();
-        Thread.sleep(5000);
-        utils.waitUntilElementIsVisble(registrationLink).click();
-        Thread.sleep(5000);
-        if (hook.getDriver().getPageSource().contains("Access Denied")) {
-            hook.getDriver().navigate().to("https://uk.farnell.com/webapp/wcs/stores/servlet/UserRegistrationForm?myAcctMain=&new=Y&catalogId=15001&storeId=10151&langId=44");
+        utils.waitForPageLoad();
+        log.info("waiting for the cookies");
+        if (cookies.isDisplayed()) {
+            cookies.click();
+            log.info("clicked on the cookies");
+            hook.getDriver().manage().deleteAllCookies();
         }
-
-        Thread.sleep(5000);
+        utils.waitUntilElementIsVisble(registrationLink).click();
+        utils.waitUntilElementIsVisble(cookies).click();
     }
+
+    public void enterRegistrationDetails(String rememberMe) {
+        utils.waitForPageLoad();
+        userName.sendKeys(faker.name().username());
+        userPassword.sendKeys("TestPassword@1");
+        fullName.sendKeys(faker.name().fullName());
+        email.sendKeys(faker.internet().safeEmailAddress());
+        if (rememberMe.equalsIgnoreCase("off")) {
+            utils.executeJavascript("document.getElementById(\"rememberMe\").click()");
+
+        }
+        registerButton.click();
+
+    }
+
 
 }

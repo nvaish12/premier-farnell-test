@@ -3,10 +3,12 @@ package uk.farnell.com.helpers;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.opera.OperaDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,7 +26,6 @@ public class WebDriverFactory {
     public static void loadProperties() {
         currentDirectory = System.getProperty("user.dir");
         prop = new Properties();
-        //FileInputStream fis;
         try {
             fis = new FileInputStream(currentDirectory + "/src/test/resources/config.properties");
             prop.load(fis);

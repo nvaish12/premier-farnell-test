@@ -56,7 +56,10 @@ mvn clean verify -Dbrowser=ie
 
 Run all tests with a specific tag
 ~~~~
-mvn clean verify -Dcucumber.options="--tags @reg"
+mvn clean verify -Dcucumber.options="--tags @regremember"
+or 
+mvn clean verify -Dcucumber.options="--tags @regdontremember"
+
 ~~~~
 
 ### Cucumber Test Reports

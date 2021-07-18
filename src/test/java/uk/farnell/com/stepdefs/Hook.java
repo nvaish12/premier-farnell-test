@@ -44,7 +44,6 @@ public class Hook {
     public static void intialiseWebDriver() {
         if((driver == null)) {
             driver = WebDriverFactory.createWebDriver();
-            driver.manage().deleteAllCookies();
         }
     }
 
