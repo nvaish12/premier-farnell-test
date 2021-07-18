@@ -21,10 +21,10 @@ public class WebDriverFactory {
     public static String currentDirectory;
     public static String pathOfScreenshot;
     public static FileInputStream fis;
+
     public static void loadProperties() {
         currentDirectory = System.getProperty("user.dir");
         prop = new Properties();
-        //FileInputStream fis;
         try {
             fis = new FileInputStream(currentDirectory + "/src/test/resources/config.properties");
             prop.load(fis);

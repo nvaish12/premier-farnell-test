@@ -1,5 +1,6 @@
 package uk.farnell.com.pages;
 
+import com.github.javafaker.Faker;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -11,36 +12,60 @@ import uk.farnell.com.stepdefs.Hook;
 public class RegistrationPage {
 
     private static final Logger log = LoggerFactory.getLogger(RegistrationPage.class);
-    Hook hook;
-    CommonExpectedConditions utils;
+    final Hook hook;
+    final CommonExpectedConditions utils;
+    final Faker faker = new Faker();
+    @FindBy(xpath = "//*[@class='regLink omTagEvt']")
+    private WebElement registrationLink;
+    @FindBy(id = "onetrust-accept-btn-handler")
+    private WebElement cookies;
+    @FindBy(id = "logonId")
+    private WebElement userName;
+    @FindBy(id = "logonPassword")
+    private WebElement userPassword;
+    @FindBy(id = "firstName")
+    private WebElement fullName;
+    @FindBy(id = "email1")
+    private WebElement email;
+    @FindBy(id = "registerValidate")
+    private WebElement registerButton;
 
     public RegistrationPage(Hook hook, CommonExpectedConditions utils) {
-        this.hook=hook;
-        this.utils=utils;
+        this.hook = hook;
+        this.utils = utils;
         PageFactory.initElements(hook.getDriver(), this);
     }
 
-    @FindBy(css = "#guestPar > a.regLink.omTagEvt")
-    private WebElement registrationLink;
-
-    @FindBy(id="onetrust-accept-btn-handler")
-    private WebElement cookies;
-
     public void goToUrl() {
-        hook.getDriver().get(utils.getBaseUrl());
+        hook.getDriver().get(CommonExpectedConditions.getBaseUrl());
     }
 
-    public void navigateToRegistrationPage() throws InterruptedException {
-        Thread.sleep(5000);
-        utils.waitUntilElementIsVisble(cookies).click();
-        Thread.sleep(5000);
-        utils.waitUntilElementIsVisble(registrationLink).click();
-        Thread.sleep(5000);
-        if (hook.getDriver().getPageSource().contains("Access Denied")) {
-            hook.getDriver().navigate().to("https://uk.farnell.com/webapp/wcs/stores/servlet/UserRegistrationForm?myAcctMain=&new=Y&catalogId=15001&storeId=10151&langId=44");
+    public void navigateToRegistrationPage() {
+        utils.waitForPageLoad();
+        log.info("waiting for the cookies");
+        if (cookies.isDisplayed()) {
+            cookies.click();
+            log.info("clicked on the cookies");
+            hook.getDriver().manage().deleteAllCookies();
         }
+        utils.waitUntilElementIsVisible(registrationLink).click();
+        utils.waitUntilElementIsVisible(cookies).click();
+        log.info("navigateToRegistrationPage() - User has navigated to registration page");
 
-        Thread.sleep(5000);
     }
+
+    public void enterRegistrationDetails(String rememberMe) {
+        utils.waitForPageLoad();
+        userName.sendKeys(faker.name().username());
+        userPassword.sendKeys("TestPassword@1");
+        fullName.sendKeys(faker.name().fullName());
+        email.sendKeys(faker.internet().safeEmailAddress());
+        if (rememberMe.equalsIgnoreCase("off")) {
+            utils.executeJavascript("document.getElementById(\"rememberMe\").click()");
+        }
+        registerButton.click();
+        log.info("enterRegistrationDetails() - User has entered the registration details");
+    }
+
 
 }

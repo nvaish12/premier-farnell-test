@@ -1,22 +1,26 @@
 package uk.farnell.com.stepdefs;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
 import uk.farnell.com.pages.RegistrationPage;
 
 public class RegistrationSteps {
 
-    private Hook hook;
-    private RegistrationPage registrationPage;
+    private final RegistrationPage registrationPage;
 
     public RegistrationSteps(Hook hook, RegistrationPage hpage) {
-        this.hook = hook;
         this.registrationPage = hpage;
     }
 
     @Given("^user is on the premier farnell site registration page$")
-    public void user_is_on_the_premier_farnell_site_registration_page() throws InterruptedException{
+    public void navigateToRegistrationPage() {
         registrationPage.goToUrl();
         registrationPage.navigateToRegistrationPage();
     }
 
+    @When("user has entered and submitted registration details with remember me check box turned {string}")
+    public void userHasEnteredAndSubmittedRegistrationDetailsWithRememberMeCheckBoxTurned(String rememberMe) {
+        registrationPage.enterRegistrationDetails(rememberMe);
+
+    }
 }
