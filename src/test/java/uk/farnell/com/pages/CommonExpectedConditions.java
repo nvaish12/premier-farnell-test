@@ -13,7 +13,8 @@ import static uk.farnell.com.helpers.WebDriverFactory.baseUrl;
 
 public class CommonExpectedConditions {
 
-    Hook hook;
+    final Hook hook;
+
     public CommonExpectedConditions(Hook hook) {
         this.hook = hook;
     }
@@ -24,14 +25,9 @@ public class CommonExpectedConditions {
     }
 
 
-    public WebElement waitUntilElementIsVisble(WebElement element) {
+    public WebElement waitUntilElementIsVisible(WebElement element) {
         return new WebDriverWait(hook.getDriver(), 30)
                 .until(ExpectedConditions.visibilityOf(element));
-    }
-
-    public WebElement waitUntilElementClickable(WebElement element) {
-        return new WebDriverWait(hook.getDriver(), 30)
-                .until(ExpectedConditions.elementToBeClickable(element));
     }
 
     public void waitForPageLoad() {
@@ -39,8 +35,8 @@ public class CommonExpectedConditions {
                 ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
     }
 
-    public void executeJavascript(String executeScript){
-        JavascriptExecutor js = (JavascriptExecutor)hook.getDriver();
+    public void executeJavascript(String executeScript) {
+        JavascriptExecutor js = (JavascriptExecutor) hook.getDriver();
         js.executeScript(executeScript);
     }
 

@@ -12,8 +12,23 @@ import uk.farnell.com.stepdefs.Hook;
 public class RegistrationPage {
 
     private static final Logger log = LoggerFactory.getLogger(RegistrationPage.class);
-    Hook hook;
-    CommonExpectedConditions utils;
+    final Hook hook;
+    final CommonExpectedConditions utils;
+    final Faker faker = new Faker();
+    @FindBy(xpath = "//*[@class='regLink omTagEvt']")
+    private WebElement registrationLink;
+    @FindBy(id = "onetrust-accept-btn-handler")
+    private WebElement cookies;
+    @FindBy(id = "logonId")
+    private WebElement userName;
+    @FindBy(id = "logonPassword")
+    private WebElement userPassword;
+    @FindBy(id = "firstName")
+    private WebElement fullName;
+    @FindBy(id = "email1")
+    private WebElement email;
+    @FindBy(id = "registerValidate")
+    private WebElement registerButton;
 
     public RegistrationPage(Hook hook, CommonExpectedConditions utils) {
         this.hook = hook;
@@ -21,34 +36,11 @@ public class RegistrationPage {
         PageFactory.initElements(hook.getDriver(), this);
     }
 
-    Faker faker = new Faker();
-
-    @FindBy(xpath = "//*[@class='regLink omTagEvt']")
-    private WebElement registrationLink;
-
-    @FindBy(id = "onetrust-accept-btn-handler")
-    private WebElement cookies;
-
-    @FindBy(id = "logonId")
-    private WebElement userName;
-
-    @FindBy(id = "logonPassword")
-    private WebElement userPassword;
-
-    @FindBy(id = "firstName")
-    private WebElement fullName;
-
-    @FindBy(id = "email1")
-    private WebElement email;
-
-    @FindBy(id = "registerValidate")
-    private WebElement registerButton;
-
     public void goToUrl() {
-        hook.getDriver().get(utils.getBaseUrl());
+        hook.getDriver().get(CommonExpectedConditions.getBaseUrl());
     }
 
-    public void navigateToRegistrationPage() throws InterruptedException {
+    public void navigateToRegistrationPage() {
         utils.waitForPageLoad();
         log.info("waiting for the cookies");
         if (cookies.isDisplayed()) {
@@ -56,8 +48,10 @@ public class RegistrationPage {
             log.info("clicked on the cookies");
             hook.getDriver().manage().deleteAllCookies();
         }
-        utils.waitUntilElementIsVisble(registrationLink).click();
-        utils.waitUntilElementIsVisble(cookies).click();
+        utils.waitUntilElementIsVisible(registrationLink).click();
+        utils.waitUntilElementIsVisible(cookies).click();
+        log.info("navigateToRegistrationPage() - User has navigated to registration page");
+
     }
 
     public void enterRegistrationDetails(String rememberMe) {
@@ -68,10 +62,9 @@ public class RegistrationPage {
         email.sendKeys(faker.internet().safeEmailAddress());
         if (rememberMe.equalsIgnoreCase("off")) {
             utils.executeJavascript("document.getElementById(\"rememberMe\").click()");
-
         }
         registerButton.click();
-
+        log.info("enterRegistrationDetails() - User has entered the registration details");
     }
 
 
