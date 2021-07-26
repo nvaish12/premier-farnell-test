@@ -50,6 +50,7 @@ public class RegistrationPage {
         }
         utils.waitUntilElementIsVisible(registrationLink).click();
         utils.waitUntilElementIsVisible(cookies).click();
+        hook.getDriver().manage().deleteAllCookies();
         log.info("navigateToRegistrationPage() - User has navigated to registration page");
 
     }

@@ -1,5 +1,6 @@
 package uk.farnell.com.pages;
 
+import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -25,7 +26,7 @@ public class MyAccountPage {
     public void userIsLoggedInToTheSite() {
         utils.waitForPageLoad();
         // log.info("\n" + hook.getDriver().getPageSource());
-        // Assert.assertTrue(userName.isDisplayed());
+        Assert.assertTrue(userName.isDisplayed());
         log.info("User is logged in to the site");
     }
 

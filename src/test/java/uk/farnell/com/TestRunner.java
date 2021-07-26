@@ -2,12 +2,7 @@ package uk.farnell.com;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
-
-import static uk.farnell.com.stepdefs.Hook.closeDriver;
-import static uk.farnell.com.stepdefs.Hook.initialiseWebDriver;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
@@ -18,14 +13,5 @@ import static uk.farnell.com.stepdefs.Hook.initialiseWebDriver;
 )
 public class TestRunner {
 
-    @BeforeClass
-    public static void start() {
-        initialiseWebDriver();
-    }
-
-    @AfterClass
-    public static void finish() {
-        closeDriver();
-    }
 }
 

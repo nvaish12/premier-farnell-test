@@ -11,7 +11,7 @@ public class Hook {
 
     private static final Logger log = LoggerFactory.getLogger(Hook.class);
 
-    public static WebDriver driver;
+    private static WebDriver driver;
     private static boolean initialise = false;
 
     public static void initialiseWebDriver() {
@@ -38,12 +38,14 @@ public class Hook {
     @Before
     public void beforeAll() {
         if (!initialise) {
+            initialiseWebDriver();
             log.info("Test execution started");
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 log.info("Test execution finished");
                 closeDriver();
             }));
             initialise = true;
+
         }
     }
 
