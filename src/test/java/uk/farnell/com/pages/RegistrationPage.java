@@ -68,5 +68,17 @@ public class RegistrationPage {
         log.info("enterRegistrationDetails() - User has entered the registration details");
     }
 
+    public void registerMultipleUsers(String username, String password, String emailAddress, String fullname, String rememberMeOption) {
+        utils.waitForPageLoad();
+        userName.sendKeys(username);
+        userPassword.sendKeys(password);
+        fullName.sendKeys(fullname);
+        email.sendKeys(emailAddress);
+        if (rememberMeOption.equalsIgnoreCase("off")) {
+            utils.executeJavascript("document.getElementById(\"rememberMe\").click()");
+        }
+        registerButton.click();
+        log.info("enterRegistrationDetails() - User has entered the registration details");
+    }
 
 }
